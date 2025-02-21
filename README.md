@@ -184,38 +184,38 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 For bug reports and feature requests, please use the GitHub issue tracker.
 
 # TODO
-- Cache feed content locally using SQLite or similar
-- Allow reading cached content when offline
-- Implement background sync for feeds
-- Store images locally for offline viewing
-- Full-text search across all feeds
-- Advanced filtering (date ranges, read/unread, keywords)
-- Tag system for articles
-- Smart categorization using NLP/keywords
-- OPML file import/export for feed lists
-- Export articles to PDF/HTML/Markdown
-- Backup/restore of all settings and data
-- Browser bookmark import
-- Keyboard shortcuts for navigation
-- Reading progress tracking
-- Article preview on hover
-- Infinite scroll for articles
-- Dark mode support
-- Multi-language UI
-- Reading time estimates
-- Update frequency analysis
-- Most active feeds tracking
-- Content similarity detection
-- Reading habits dashboard
-- Share articles to social media
-- Save articles to read-later services (Pocket, Instapaper)
-- Comment system for personal notes
-- Feed recommendations based on reading habits
-- Feed health monitoring (detect dead feeds)
-- Duplicate article detection
-- Feed merge/split capabilities
-- Feed content rules (filters, transformations)
-- Feed content sanitization
-- Secure storage of credentials
-- Content verification (checksums)
-- SSL certificate validation
+- [ ] Cache feed content locally using SQLite or similar
+- [ ] Allow reading cached content when offline
+- [ ] Implement background sync for feeds
+- [ ] Store images locally for offline viewing
+- [ ] Full-text search across all feeds
+- [ ] Advanced filtering (date ranges, read/unread, keywords)
+- [ ] Tag system for articles
+- [ ] Smart categorization using NLP/keywords
+- [ ] OPML file import/export for feed lists
+- [ ] Export articles to PDF/HTML/Markdown
+- [ ] Backup/restore of all settings and data
+- [ ] Browser bookmark import
+- [ ] Keyboard shortcuts for navigation
+- [ ] Reading progress tracking
+- [ ] Article preview on hover
+- [ ] Infinite scroll for articles
+- [ ] Dark mode support
+- [ ] Multi-language UI
+- [ ] Reading time estimates
+- [ ] Update frequency analysis
+- [ ] Most active feeds tracking
+- [ ] Content similarity detection
+- [ ] Reading habits dashboard
+- [ ] Share articles to social media
+- [ ] Save articles to read-later services (Pocket, Instapaper)
+- [ ] Comment system for personal notes
+- [ ] Feed recommendations based on reading habits
+- [ ] Feed health monitoring (detect dead feeds)
+- [ ] Duplicate article detection
+- [ ] Feed merge/split capabilities
+- [ ] Feed content rules (filters, transformations)
+- [ ] Feed content sanitization
+- [ ] Secure storage of credentials
+- [ ] Content verification (checksums)
+- [ ] SSL certificate validation
