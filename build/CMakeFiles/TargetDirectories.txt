@@ -1,5 +1,0 @@
-/home/ian/CLionProjects/rssreader/build/CMakeFiles/rss_reader.dir
-/home/ian/CLionProjects/rssreader/build/CMakeFiles/edit_cache.dir
-/home/ian/CLionProjects/rssreader/build/CMakeFiles/rebuild_cache.dir
-/home/ian/CLionProjects/rssreader/build/CMakeFiles/rss_reader_autogen_timestamp_deps.dir
-/home/ian/CLionProjects/rssreader/build/CMakeFiles/rss_reader_autogen.dir

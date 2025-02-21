@@ -1,2 +1,0 @@
-set(__QT_DEPLOY_TARGET_rss_reader_FILE /home/ian/CLionProjects/rssreader/build/rss_reader)
-set(__QT_DEPLOY_TARGET_rss_reader_TYPE EXECUTABLE)
