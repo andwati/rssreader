@@ -6,15 +6,15 @@
 #include <vector>
 
 struct FeedItem {
-    QString title;
-    QString link;
-    QString description;
-    QString pubDate;
+  QString title;
+  QString link;
+  QString description;
+  QString pubDate;
 };
 
 class RSSFeed {
 public:
-    QString feedUrl;
-    QString feedTitle;
-    std::vector<FeedItem> items;
+  QString feedUrl;
+  QString feedTitle;
+  std::vector<FeedItem> items;
 };

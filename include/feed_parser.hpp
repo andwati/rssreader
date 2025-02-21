@@ -9,5 +9,5 @@
 
 class FeedParser {
 public:
-    static bool parse(const QByteArray& data, RSSFeed& feed);
+  static bool parse(const QByteArray &data, RSSFeed &feed);
 };

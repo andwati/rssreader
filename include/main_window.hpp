@@ -15,23 +15,28 @@ class QNetworkAccessManager;
 class QNetworkReply;
 
 class RSSReader : public QMainWindow {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit RSSReader(QWidget* parent = nullptr);
-    ~RSSReader();
+  explicit RSSReader(QWidget *parent = nullptr);
+
+  ~RSSReader();
 
 private:
-    void setupUI();
-    void setupConnections();
-    void handleNetworkReply(QNetworkReply* reply);
+  void setupUI();
 
-    private slots:
-        void addNewFeed();
-    void loadFeedContent(int index);
-    void displayArticle(int index);
+  void setupConnections();
+
+  void handleNetworkReply(QNetworkReply *reply);
+
+private slots:
+  void addNewFeed();
+
+  void loadFeedContent(int index);
+
+  void displayArticle(int index);
 
 private:
-    struct Private;
-    std::unique_ptr<Private> d;
+  struct Private;
+  std::unique_ptr<Private> d;
 };
