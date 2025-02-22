@@ -27,6 +27,7 @@ struct RSSReader::Private {
   QPushButton *markAllReadButton{nullptr};
   QTimer *refreshTimer{nullptr};
   std::vector<FeedCategory> categories;
+  QMenu *feedContextMenu{nullptr};
 };
 
 RSSReader::RSSReader(QWidget *parent)
@@ -80,6 +81,19 @@ void RSSReader::setupUI() {
   readLayout->addWidget(d->markAllReadButton);
   rightPanel->addLayout(readLayout);
 
+  // Setup context menu
+  d->feedList->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  d->feedContextMenu = new QMenu(this);
+  d->feedContextMenu->
+     addAction("Refresh", this, &RSSReader::refreshCurrentFeed);
+  d->feedContextMenu->addAction("Settings", this, &RSSReader::editFeedSettings);
+  d->feedContextMenu->addSeparator();
+  d->feedContextMenu->addAction("Move Up", this, &RSSReader::moveFeedUp);
+  d->feedContextMenu->addAction("Move Down", this, &RSSReader::moveFeedDown);
+  d->feedContextMenu->addSeparator();
+  d->feedContextMenu->addAction("Delete", this, &RSSReader::deleteFeed);
+
   loadSettings();
   setupRefreshTimer();
 
@@ -103,6 +117,9 @@ void RSSReader::setupConnections() {
           &RSSReader::markAsRead);
   connect(d->markAllReadButton, &QPushButton::clicked, this,
           &RSSReader::markAllAsRead);
+
+  connect(d->feedList, &QWidget::customContextMenuRequested,
+            this, &RSSReader::showContextMenu);
 }
 
 void RSSReader::addNewFeed() {
@@ -243,4 +260,152 @@ void RSSReader::markAllAsRead() {
       item->setFont(font);
     }
   }
+}
+
+
+void RSSReader::showContextMenu(const QPoint& pos) {
+    if (d->feedList->count() > 0) {
+        d->feedContextMenu->popup(d->feedList->mapToGlobal(pos));
+    }
+}
+
+void RSSReader::refreshCurrentFeed() {
+    int index = d->feedList->currentRow();
+    if (index >= 0 && index < static_cast<int>(d->feeds.size())) {
+        refreshFeed(*d->feeds[index]);
+    }
+}
+
+void RSSReader::refreshAllFeeds() {
+    for (auto& feed : d->feeds) {
+        refreshFeed(*feed);
+    }
+}
+
+void RSSReader::refreshFeed(RSSFeed& feed) {
+    QNetworkRequest request((QUrl(feed.feedUrl)));
+    QNetworkReply* reply = d->networkManager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        handleNetworkReply(reply);
+    });
+}
+
+void RSSReader::deleteFeed() {
+    int index = d->feedList->currentRow();
+    if (index >= 0) {
+        d->feeds.erase(d->feeds.begin() + index);
+        delete d->feedList->takeItem(index);
+        d->articleList->clear();
+        d->contentView->clear();
+        saveSettings();
+    }
+}
+
+void RSSReader::moveFeedUp() {
+    int index = d->feedList->currentRow();
+    if (index > 0) {
+        std::swap(d->feeds[index], d->feeds[index - 1]);
+        QListWidgetItem* item = d->feedList->takeItem(index);
+        d->feedList->insertItem(index - 1, item);
+        d->feedList->setCurrentRow(index - 1);
+        saveSettings();
+    }
+}
+
+void RSSReader::moveFeedDown() {
+    int index = d->feedList->currentRow();
+    if (index >= 0 && index < d->feedList->count() - 1) {
+        std::swap(d->feeds[index], d->feeds[index + 1]);
+        QListWidgetItem* item = d->feedList->takeItem(index);
+        d->feedList->insertItem(index + 1, item);
+        d->feedList->setCurrentRow(index + 1);
+        saveSettings();
+    }
+}
+
+void RSSReader::editFeedSettings() {
+    int index = d->feedList->currentRow();
+    if (index >= 0) {
+        SettingsDialog dialog(*d->feeds[index], this);
+        if (dialog.exec() == QDialog::Accepted) {
+            // Refresh the current article if one is displayed
+            int articleIndex = d->articleList->currentRow();
+            if (articleIndex >= 0) {
+                displayArticle(articleIndex);
+            }
+            saveSettings();
+        }
+    }
+}
+
+QString RSSReader::formatContent(const FeedItem& item, const RSSFeed& feed) const {
+    QString style;
+    if (feed.formatting.useCustomCSS) {
+        style = feed.formatting.customCSS;
+    } else {
+        style = QString(R"(
+            body {
+                font-family: %1;
+                font-size: %2pt;
+                background-color: %3;
+                color: %4;
+            }
+            h1, h2 {
+                font-family: %5;
+                font-size: %6pt;
+            }
+            a {
+                color: %7;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+                %8
+            }
+        )")
+        .arg(feed.formatting.contentFont)
+        .arg(feed.formatting.contentSize)
+        .arg(feed.formatting.backgroundColor)
+        .arg(feed.formatting.textColor)
+        .arg(feed.formatting.titleFont)
+        .arg(feed.formatting.titleSize)
+        .arg(feed.formatting.linkColor)
+        .arg(feed.formatting.showImages ? "" : "display: none;");
+    }
+
+    QString content = QString(R"(
+        <html>
+        <head>
+            <style>%1</style>
+        </head>
+        <body>
+            <h1>%2</h1>
+            <p><i>Published: %3</i></p>
+            <div class="content">%4</div>
+            <p><a href="%5">Read more...</a></p>
+        </body>
+        </html>
+    )")
+    .arg(style)
+    .arg(item.title)
+    .arg(item.pubDate)
+    .arg(item.description)
+    .arg(item.link);
+
+    return content;
+}
+
+void RSSReader::displayArticle(int index) {
+    int feedIndex = d->feedList->currentRow();
+    if (feedIndex >= 0 && index >= 0) {
+        const auto& feed = d->feeds[feedIndex];
+        if (index < static_cast<int>(feed->items.size())) {
+            const auto& item = feed->items[index];
+            d->contentView->setHtml(formatContent(item, *feed));
+        }
+    }
 }

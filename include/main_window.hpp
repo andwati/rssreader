@@ -15,6 +15,7 @@ class QNetworkAccessManager;
 class QNetworkReply;
 class QTimer;
 class QComboBox;
+class QMenu;
 
 class RSSReader : public QMainWindow {
   Q_OBJECT
@@ -30,18 +31,27 @@ protected:
 private:
   void setupUI();
   void setupConnections();
+  void setupMenus();
   void setupRefreshTimer();
   void handleNetworkReply(QNetworkReply *reply);
   void loadSettings();
   void saveSettings();
   void refreshFeeds();
+  void refreshFeed(RSSFeed &feed);
+  QString formatContent(const FeedItem &item, const RSSFeed &feed) const;
 
 private slots:
   void addNewFeed();
-  void addNewCategory();
+  void deleteFeed();
+  void moveFeedUo();
+  void moveFeedDown();
+  void editFeedSettings();
   void loadFeedContent(int index);
-
   void displayArticle(int index);
+  void refreshCurentFeed();
+  void refreshAllFeeds();
+  void addNewCategory();
+  void showContextMenu(const QPoint &pos);
   void categoryChanged(const QString &category);
   void markAsRead();
   void markAllAsRead();

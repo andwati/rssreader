@@ -26,8 +26,10 @@ public:
   QString description;
   QString category;
   std::vector<FeedItem> items;
+  QDateTime lastUpdated;
   bool autoRefresh{true};
   int refreshInterval{30}; // in minutes
+  int displayOrder{0};
   QUuid id{QUuid::createUuid()};
 
   // format settings

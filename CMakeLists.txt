@@ -18,6 +18,7 @@ set(SOURCES
         src/main_window.cpp
         src/feed_parser.cpp
         src/storage.cpp
+        src/settings_dialog.cpp
 )
 
 set(HEADERS
@@ -25,6 +26,7 @@ set(HEADERS
         include/feed_parser.hpp
         include/main_window.hpp
         include/storage.hpp
+        include/settings_dialog.hpp
 )
 
 add_executable(rss_reader ${SOURCES} ${HEADERS} ${RESOURCES})
@@ -44,7 +46,7 @@ install(TARGETS rss_reader
 )
 
 configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/resources/rss_reader.desktop.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/resources/rss_reader.desktop.ini
         ${CMAKE_CURRENT_BINARY_DIR}/rss_reader.desktop
         @ONLY
 )
