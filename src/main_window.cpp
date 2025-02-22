@@ -165,81 +165,82 @@ void RSSReader::displayArticle(int index) {
 
 
 void RSSReader::setupRefreshTimer() {
-    d->refreshTimer = new QTimer(this);
-    connect(d->refreshTimer, &QTimer::timeout, this, &RSSReader::refreshFeeds);
-    d->refreshTimer->start(5 * 60 * 1000); // 5 minutes
+  d->refreshTimer = new QTimer(this);
+  connect(d->refreshTimer, &QTimer::timeout, this, &RSSReader::refreshFeeds);
+  d->refreshTimer->start(5 * 60 * 1000); // 5 minutes
 }
 
 void RSSReader::loadSettings() {
-    FeedStorage::instance().loadCategories(d->categories);
-    for (const auto& category : d->categories) {
-        d->categoryCombo->addItem(category.name);
-    }
+  FeedStorage::instance().loadCategories(d->categories);
+  for (const auto &category : d->categories) {
+    d->categoryCombo->addItem(category.name);
+  }
 
-    std::vector<std::unique_ptr<RSSFeed>> feeds;
-    if (FeedStorage::instance().loadFeeds(feeds)) {
-        d->feeds = std::move(feeds);
-        for (const auto& feed : d->feeds) {
-            d->feedList->addItem(feed->feedTitle);
-        }
+  std::vector<std::unique_ptr<RSSFeed>> feeds;
+  if (FeedStorage::instance().loadFeeds(feeds)) {
+    d->feeds = std::move(feeds);
+    for (const auto &feed : d->feeds) {
+      d->feedList->addItem(feed->feedTitle);
     }
+  }
 }
 
 void RSSReader::saveSettings() {
-    FeedStorage::instance().saveFeeds(d->feeds);
-    FeedStorage::instance().saveCategories(d->categories);
+  FeedStorage::instance().saveFeeds(d->feeds);
+  FeedStorage::instance().saveCategories(d->categories);
 }
 
-void RSSReader::closeEvent(QCloseEvent* event) {
-    saveSettings();
-    QMainWindow::closeEvent(event);
+void RSSReader::closeEvent(QCloseEvent *event) {
+  saveSettings();
+  QMainWindow::closeEvent(event);
 }
 
 void RSSReader::addNewCategory() {
-    bool ok;
-    QString name = QInputDialog::getText(this, "Add Category",
-                                       "Enter category name:", QLineEdit::Normal,
+  bool ok;
+  QString name = QInputDialog::getText(this, "Add Category",
+                                       "Enter category name:",
+                                       QLineEdit::Normal,
                                        "", &ok);
-    if (ok && !name.isEmpty()) {
-        FeedCategory category;
-        category.name = name;
-        d->categories.push_back(category);
-        d->categoryCombo->addItem(name);
-    }
+  if (ok && !name.isEmpty()) {
+    FeedCategory category;
+    category.name = name;
+    d->categories.push_back(category);
+    d->categoryCombo->addItem(name);
+  }
 }
 
-void RSSReader::categoryChanged(const QString& category) {
-    d->feedList->clear();
-    for (const auto& feed : d->feeds) {
-        if (category == "All" || feed->category == category) {
-            d->feedList->addItem(feed->feedTitle);
-        }
+void RSSReader::categoryChanged(const QString &category) {
+  d->feedList->clear();
+  for (const auto &feed : d->feeds) {
+    if (category == "All" || feed->category == category) {
+      d->feedList->addItem(feed->feedTitle);
     }
+  }
 }
 
 void RSSReader::markAsRead() {
-    int feedIndex = d->feedList->currentRow();
-    int articleIndex = d->articleList->currentRow();
-    if (feedIndex >= 0 && articleIndex >= 0) {
-        d->feeds[feedIndex]->items[articleIndex].isRead = true;
-        QListWidgetItem* item = d->articleList->item(articleIndex);
-        QFont font = item->font();
-        font.setItalic(true);
-        item->setFont(font);
-    }
+  int feedIndex = d->feedList->currentRow();
+  int articleIndex = d->articleList->currentRow();
+  if (feedIndex >= 0 && articleIndex >= 0) {
+    d->feeds[feedIndex]->items[articleIndex].isRead = true;
+    QListWidgetItem *item = d->articleList->item(articleIndex);
+    QFont font = item->font();
+    font.setItalic(true);
+    item->setFont(font);
+  }
 }
 
 void RSSReader::markAllAsRead() {
-    int feedIndex = d->feedList->currentRow();
-    if (feedIndex >= 0) {
-        for (auto& item : d->feeds[feedIndex]->items) {
-            item.isRead = true;
-        }
-        for (int i = 0; i < d->articleList->count(); ++i) {
-            QListWidgetItem* item = d->articleList->item(i);
-            QFont font = item->font();
-            font.setItalic(true);
-            item->setFont(font);
-        }
+  int feedIndex = d->feedList->currentRow();
+  if (feedIndex >= 0) {
+    for (auto &item : d->feeds[feedIndex]->items) {
+      item.isRead = true;
     }
+    for (int i = 0; i < d->articleList->count(); ++i) {
+      QListWidgetItem *item = d->articleList->item(i);
+      QFont font = item->font();
+      font.setItalic(true);
+      item->setFont(font);
+    }
+  }
 }

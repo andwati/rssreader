@@ -39,7 +39,7 @@ sudo dnf install gcc-c++ cmake qt6-qtbase-devel qt6-tools
 
 2. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/rss-reader.git
+git clone https://github.com/andwati/rss-reader.git
 cd rss-reader
 ```
 
@@ -49,50 +49,6 @@ mkdir build
 cd build
 cmake ..
 cmake --build . -j$(nproc)
-```
-
-### Windows
-
-1. Install prerequisites:
-    - [Visual Studio 2019 or later](https://visualstudio.microsoft.com/downloads/)
-    - [Qt 6.x](https://www.qt.io/download)
-    - [CMake](https://cmake.org/download/)
-
-2. Clone the repository:
-```cmd
-git clone https://github.com/yourusername/rss-reader.git
-cd rss-reader
-```
-
-3. Configure and build:
-```cmd
-mkdir build
-cd build
-cmake .. -DCMAKE_PREFIX_PATH=C:\Qt\6.x\msvc2019_64
-cmake --build . --config Release
-```
-
-Note: Adjust the Qt path according to your installation.
-
-### macOS
-
-1. Install prerequisites using Homebrew:
-```bash
-brew install cmake qt@6
-```
-
-2. Clone the repository:
-```bash
-git clone https://github.com/yourusername/rss-reader.git
-cd rss-reader
-```
-
-3. Build the project:
-```bash
-mkdir build
-cd build
-cmake .. -DCMAKE_PREFIX_PATH=$(brew --prefix qt@6)
-cmake --build . -j$(sysctl -n hw.ncpu)
 ```
 
 ## Installation
@@ -105,18 +61,6 @@ sudo cmake --install .
 
 The application will be installed to `/usr/local/bin` by default.
 
-### Windows
-```cmd
-cd build
-cmake --install . --config Release
-```
-
-### macOS
-```bash
-cd build
-cmake --install .
-```
-
 ## Running
 
 After installation, you can run the RSS reader:
@@ -124,48 +68,6 @@ After installation, you can run the RSS reader:
 - Linux: Run `rss_reader` from terminal or launch from application menu
 - Windows: Run from Start Menu or `rss_reader.exe` in the installation directory
 - macOS: Open from Applications folder or run `rss_reader` from terminal
-
-## Development
-
-### Project Structure
-```
-rss_reader/
-├── CMakeLists.txt          
-├── include/                
-│   ├── feed.hpp
-│   ├── feed_parser.hpp
-│   ├── main_window.hpp
-│   ├── settings_dialog.hpp
-│   └── storage.hpp
-├── src/                    
-│   ├── main.cpp
-│   ├── main_window.cpp
-│   ├── feed_parser.cpp
-│   ├── settings_dialog.cpp
-│   └── storage.cpp
-└── resources/             
-    ├── icons/
-    ├── style/
-    └── resources.qrc
-```
-
-### Building for Development
-
-For development builds with debug symbols:
-
-```bash
-mkdir build-debug
-cd build-debug
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-cmake --build .
-```
-
-### Running Tests (if implemented)
-
-```bash
-cd build
-ctest --output-on-failure
-```
 
 ## Contributing
 

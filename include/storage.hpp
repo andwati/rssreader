@@ -11,16 +11,16 @@
 class FeedStorage : public QObject {
   Q_OBJECT
 
-  public:
-    static FeedStorage& instance();
+public:
+  static FeedStorage &instance();
 
-    bool saveFeeds(const std::vector<std::unique_ptr<RSSFeed>> & feeds);
-    bool loadFeeds(std::vector<std::unique_ptr<RSSFeed>> & feeds);
+  bool saveFeeds(const std::vector<std::unique_ptr<RSSFeed>> &feeds);
+  bool loadFeeds(std::vector<std::unique_ptr<RSSFeed>> &feeds);
 
-    bool saveCategories(const std::vector<FeedCategory> & categories );
-    bool loadCategories(std::vector<FeedCategory> & categories );
+  bool saveCategories(const std::vector<FeedCategory> &categories);
+  bool loadCategories(std::vector<FeedCategory> &categories);
 
-    private:
-      FeedStorage();
-      QString getStoragePath() const;
+private:
+  FeedStorage();
+  QString getStoragePath() const;
 };
