@@ -1,0 +1,14 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file>icons/add.png</file>
+        <file>icons/refresh.png</file>
+        <file>icons/category.png</file>
+        <file>icons/read.png</file>
+        <file>icons/rss_reader.png</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>style/dark.qss</file>
+        <file>style/light.qss</file>
+    </qresource>
+</RCC>
