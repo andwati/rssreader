@@ -16,16 +16,11 @@ A modern, feature-rich RSS feed reader built with C++17 and Qt6. This applicatio
 ## Prerequisites
 
 - C++17 compatible compiler
-    - GCC 7+ (Linux)
-    - MSVC 2019+ (Windows)
-    - Clang 5+ (macOS)
 - CMake 3.16 or higher
 - Qt 6.x
-- Git (for cloning the repository)
+- Git
 
 ## Building from Source
-
-### Linux
 
 1. Install dependencies:
 ```bash
@@ -50,24 +45,6 @@ cd build
 cmake ..
 cmake --build . -j$(nproc)
 ```
-
-## Installation
-
-### Linux
-```bash
-cd build
-sudo cmake --install .
-```
-
-The application will be installed to `/usr/local/bin` by default.
-
-## Running
-
-After installation, you can run the RSS reader:
-
-- Linux: Run `rss_reader` from terminal or launch from application menu
-- Windows: Run from Start Menu or `rss_reader.exe` in the installation directory
-- macOS: Open from Applications folder or run `rss_reader` from terminal
 
 ## Contributing
 
