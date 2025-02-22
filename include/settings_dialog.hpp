@@ -6,15 +6,15 @@
 #include <QDialog>
 #include <memory>
 
-class SettingsDialog : public QDialog {
+class SettingsDialog final : public QDialog {
   Q_OBJECT
 public:
   explicit SettingsDialog(RSSFeed& feed, QWidget* parent = nullptr);
-  ~SettingsDialog();
+  ~SettingsDialog() override;
 
 private:
   void setupUI();
-  void applySettings();
+  void applySettings() const;
 
   struct Private;
   std::unique_ptr<Private> d;

@@ -3,6 +3,8 @@
 //
 #include "main_window.hpp"
 #include "feed_parser.hpp"
+#include "storage.hpp"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QListWidget>
@@ -12,6 +14,7 @@
 #include <QNetworkReply>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <qcombobox.h>
 
 struct RSSReader::Private {
   QWidget *centralWidget{nullptr};

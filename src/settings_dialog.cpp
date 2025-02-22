@@ -68,22 +68,19 @@ void SettingsDialog::setupUI() {
     d->linkColorBtn = new QPushButton("Choose...");
 
     connect(d->bgColorBtn, &QPushButton::clicked, this, [this]() {
-        QColor color = QColorDialog::getColor(QColor(d->bgColor), this);
-        if (color.isValid()) {
+      if (const QColor color = QColorDialog::getColor(QColor(d->bgColor), this); color.isValid()) {
             d->bgColor = color.name();
         }
     });
 
     connect(d->textColorBtn, &QPushButton::clicked, this, [this]() {
-        QColor color = QColorDialog::getColor(QColor(d->txtColor), this);
-        if (color.isValid()) {
+      if (const QColor color = QColorDialog::getColor(QColor(d->txtColor), this); color.isValid()) {
             d->txtColor = color.name();
         }
     });
 
     connect(d->linkColorBtn, &QPushButton::clicked, this, [this]() {
-        QColor color = QColorDialog::getColor(QColor(d->lnkColor), this);
-        if (color.isValid()) {
+      if (const QColor color = QColorDialog::getColor(QColor(d->lnkColor), this); color.isValid()) {
             d->lnkColor = color.name();
         }
     });
@@ -117,7 +114,7 @@ void SettingsDialog::setupUI() {
     connect(this, &QDialog::accepted, this, &SettingsDialog::applySettings);
 }
 
-void SettingsDialog::applySettings() {
+void SettingsDialog::applySettings() const {
     d->feed.formatting.titleFont = d->titleFont->currentFont().family();
     d->feed.formatting.titleSize = d->titleSize->value();
     d->feed.formatting.contentFont = d->contentFont->currentFont().family();

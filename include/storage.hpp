@@ -15,12 +15,12 @@ public:
   static FeedStorage &instance();
 
   bool saveFeeds(const std::vector<std::unique_ptr<RSSFeed>> &feeds);
-  bool loadFeeds(std::vector<std::unique_ptr<RSSFeed>> &feeds);
+  bool loadFeeds(std::vector<std::unique_ptr<RSSFeed>> &feeds) const;
 
   bool saveCategories(const std::vector<FeedCategory> &categories);
   bool loadCategories(std::vector<FeedCategory> &categories);
 
 private:
   FeedStorage();
-  QString getStoragePath() const;
+  static QString getStoragePath();
 };

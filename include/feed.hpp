@@ -9,6 +9,10 @@
 #include <QDateTime>
 #include <QUuid>
 
+struct FeedCategory {
+  QString name;
+  QString description;
+};
 struct FeedItem {
   QString title;
   QString link;

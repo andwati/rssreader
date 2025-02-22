@@ -43,12 +43,12 @@ private:
 private slots:
   void addNewFeed();
   void deleteFeed();
-  void moveFeedUo();
+  void moveFeedUp();
   void moveFeedDown();
   void editFeedSettings();
   void loadFeedContent(int index);
   void displayArticle(int index);
-  void refreshCurentFeed();
+  void refreshCurrentFeed();
   void refreshAllFeeds();
   void addNewCategory();
   void showContextMenu(const QPoint &pos);

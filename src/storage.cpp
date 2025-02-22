@@ -18,7 +18,7 @@ FeedStorage::FeedStorage() {
     }
 }
 
-QString FeedStorage::getStoragePath() const {
+QString FeedStorage::getStoragePath() {
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
@@ -57,7 +57,7 @@ bool FeedStorage::saveFeeds(const std::vector<std::unique_ptr<RSSFeed>>& feeds) 
     return true;
 }
 
-bool FeedStorage::loadFeeds(std::vector<std::unique_ptr<RSSFeed>>& feeds) {
+bool FeedStorage::loadFeeds(std::vector<std::unique_ptr<RSSFeed>>& feeds) const {
     QFile file(getStoragePath() + "/feeds.json");
     if (!file.open(QIODevice::ReadOnly)) {
         return false;
