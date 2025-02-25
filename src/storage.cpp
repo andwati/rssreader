@@ -12,14 +12,14 @@ FeedStorage& FeedStorage::instance() {
 }
 
 FeedStorage::FeedStorage() {
-    QDir dir(getStoragePath());
-    if (!dir.exists()) {
+  if (QDir dir(getStoragePath()); !dir.exists()) {
         dir.mkpath(".");
     }
 }
 
+
 QString FeedStorage::getStoragePath() {
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+  return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
 bool FeedStorage::saveFeeds(const std::vector<std::unique_ptr<RSSFeed>>& feeds) {
@@ -57,8 +57,9 @@ bool FeedStorage::saveFeeds(const std::vector<std::unique_ptr<RSSFeed>>& feeds) 
     return true;
 }
 
-bool FeedStorage::loadFeeds(std::vector<std::unique_ptr<RSSFeed>>& feeds) const {
-    QFile file(getStoragePath() + "/feeds.json");
+bool FeedStorage::loadFeeds(
+    std::vector<std::unique_ptr<RSSFeed>> &feeds) {
+  QFile file(getStoragePath() + "/feeds.json");
     if (!file.open(QIODevice::ReadOnly)) {
         return false;
     }
@@ -121,7 +122,7 @@ bool FeedStorage::loadCategories(std::vector<FeedCategory>& categories) {
         return false;
     }
 
-    QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
+    const QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     if (!doc.isArray()) {
         return false;
     }

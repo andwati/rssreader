@@ -5,5 +5,5 @@ int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
   RSSReader reader;
   reader.show();
-  return app.exec();
+  return QApplication::exec();
 }

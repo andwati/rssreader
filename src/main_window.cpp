@@ -3,6 +3,7 @@
 //
 #include "main_window.hpp"
 #include "feed_parser.hpp"
+#include "settings_dialog.hpp"
 #include "storage.hpp"
 
 #include <QVBoxLayout>
@@ -15,6 +16,8 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <qcombobox.h>
+#include <QMenu>
+#include <QTimer>
 
 struct RSSReader::Private {
   QWidget *centralWidget{nullptr};
@@ -125,6 +128,9 @@ void RSSReader::setupConnections() {
             this, &RSSReader::showContextMenu);
 }
 
+void RSSReader::setupMenus() {
+}
+
 void RSSReader::addNewFeed() {
   bool ok;
   QString url = QInputDialog::getText(this, "Add Feed",
@@ -168,20 +174,7 @@ void RSSReader::loadFeedContent(int index) {
   }
 }
 
-void RSSReader::displayArticle(int index) {
-  int feedIndex = d->feedList->currentRow();
-  if (feedIndex >= 0 && index >= 0) {
-    const auto &feed = d->feeds[feedIndex];
-    if (index < static_cast<int>(feed->items.size())) {
-      const auto &item = feed->items[index];
-      QString content = QString("<h2>%1</h2>").arg(item.title);
-      content += QString("<p><i>Published: %1</i></p>").arg(item.pubDate);
-      content += QString("<p>%1</p>").arg(item.description);
-      content += QString("<p><a href='%1'>Read more...</a></p>").arg(item.link);
-      d->contentView->setHtml(content);
-    }
-  }
-}
+
 
 
 void RSSReader::setupRefreshTimer() {
@@ -191,13 +184,13 @@ void RSSReader::setupRefreshTimer() {
 }
 
 void RSSReader::loadSettings() {
-  FeedStorage::instance().loadCategories(d->categories);
+  FeedStorage::loadCategories(d->categories);
   for (const auto &category : d->categories) {
     d->categoryCombo->addItem(category.name);
   }
 
   std::vector<std::unique_ptr<RSSFeed>> feeds;
-  if (FeedStorage::instance().loadFeeds(feeds)) {
+  if (FeedStorage::loadFeeds(feeds)) {
     d->feeds = std::move(feeds);
     for (const auto &feed : d->feeds) {
       d->feedList->addItem(feed->feedTitle);
@@ -205,9 +198,12 @@ void RSSReader::loadSettings() {
   }
 }
 
-void RSSReader::saveSettings() {
-  FeedStorage::instance().saveFeeds(d->feeds);
-  FeedStorage::instance().saveCategories(d->categories);
+void RSSReader::saveSettings() const {
+  FeedStorage::saveFeeds(d->feeds);
+  FeedStorage::saveCategories(d->categories);
+}
+
+void RSSReader::refreshFeeds() {
 }
 
 void RSSReader::closeEvent(QCloseEvent *event) {
@@ -229,7 +225,7 @@ void RSSReader::addNewCategory() {
   }
 }
 
-void RSSReader::categoryChanged(const QString &category) {
+void RSSReader::categoryChanged(const QString &category) const {
   d->feedList->clear();
   for (const auto &feed : d->feeds) {
     if (category == "All" || feed->category == category) {
@@ -238,7 +234,7 @@ void RSSReader::categoryChanged(const QString &category) {
   }
 }
 
-void RSSReader::markAsRead() {
+void RSSReader::markAsRead() const {
   int feedIndex = d->feedList->currentRow();
   int articleIndex = d->articleList->currentRow();
   if (feedIndex >= 0 && articleIndex >= 0) {
@@ -250,7 +246,7 @@ void RSSReader::markAsRead() {
   }
 }
 
-void RSSReader::markAllAsRead() {
+void RSSReader::markAllAsRead() const {
   int feedIndex = d->feedList->currentRow();
   if (feedIndex >= 0) {
     for (auto &item : d->feeds[feedIndex]->items) {
@@ -285,7 +281,7 @@ void RSSReader::refreshAllFeeds() {
     }
 }
 
-void RSSReader::refreshFeed(RSSFeed& feed) {
+void RSSReader::refreshFeed(const RSSFeed& feed) {
     QNetworkRequest request((QUrl(feed.feedUrl)));
     QNetworkReply* reply = d->networkManager->get(request);
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
@@ -341,7 +337,7 @@ void RSSReader::editFeedSettings() {
     }
 }
 
-QString RSSReader::formatContent(const FeedItem& item, const RSSFeed& feed) const {
+QString RSSReader::formatContent(const FeedItem& item, const RSSFeed& feed) {
     QString style;
     if (feed.formatting.useCustomCSS) {
         style = feed.formatting.customCSS;
@@ -401,14 +397,29 @@ QString RSSReader::formatContent(const FeedItem& item, const RSSFeed& feed) cons
 
     return content;
 }
+//
+// void RSSReader::displayArticle(int index) {
+//     int feedIndex = d->feedList->currentRow();
+//     if (feedIndex >= 0 && index >= 0) {
+//         const auto& feed = d->feeds[feedIndex];
+//         if (index < static_cast<int>(feed->items.size())) {
+//             const auto& item = feed->items[index];
+//             d->contentView->setHtml(formatContent(item, *feed));
+//         }
+//     }
+// }
 
 void RSSReader::displayArticle(int index) {
-    int feedIndex = d->feedList->currentRow();
-    if (feedIndex >= 0 && index >= 0) {
-        const auto& feed = d->feeds[feedIndex];
-        if (index < static_cast<int>(feed->items.size())) {
-            const auto& item = feed->items[index];
-            d->contentView->setHtml(formatContent(item, *feed));
-        }
+  int feedIndex = d->feedList->currentRow();
+  if (feedIndex >= 0 && index >= 0) {
+    const auto &feed = d->feeds[feedIndex];
+    if (index < static_cast<int>(feed->items.size())) {
+      const auto &item = feed->items[index];
+      QString content = QString("<h2>%1</h2>").arg(item.title);
+      content += QString("<p><i>Published: %1</i></p>").arg(item.pubDate);
+      content += QString("<p>%1</p>").arg(item.description);
+      content += QString("<p><a href='%1'>Read more...</a></p>").arg(item.link);
+      d->contentView->setHtml(content);
     }
+  }
 }

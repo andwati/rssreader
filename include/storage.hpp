@@ -14,11 +14,11 @@ class FeedStorage : public QObject {
 public:
   static FeedStorage &instance();
 
-  bool saveFeeds(const std::vector<std::unique_ptr<RSSFeed>> &feeds);
-  bool loadFeeds(std::vector<std::unique_ptr<RSSFeed>> &feeds) const;
+  static bool saveFeeds(const std::vector<std::unique_ptr<RSSFeed>> &feeds);
+  static bool loadFeeds(std::vector<std::unique_ptr<RSSFeed>> &feeds) ;
 
-  bool saveCategories(const std::vector<FeedCategory> &categories);
-  bool loadCategories(std::vector<FeedCategory> &categories);
+  static bool saveCategories(const std::vector<FeedCategory> &categories);
+  static bool loadCategories(std::vector<FeedCategory> &categories);
 
 private:
   FeedStorage();

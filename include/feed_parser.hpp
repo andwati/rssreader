@@ -4,8 +4,6 @@
 
 #pragma once
 #include "feed.hpp"
-#include <QByteArray>
-#include <memory>
 
 class FeedParser {
 public:

@@ -4,7 +4,6 @@
 #pragma once
 #include "feed.hpp"
 
-#include <QString>
 #include <vector>
 #include <QDateTime>
 #include <QUuid>

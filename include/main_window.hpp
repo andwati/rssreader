@@ -6,24 +6,23 @@
 #include "feed.hpp"
 #include <QMainWindow>
 #include <memory>
-#include <vector>
+
 
 class QListWidget;
 class QTextBrowser;
 class QPushButton;
 class QNetworkAccessManager;
 class QNetworkReply;
-class QTimer;
 class QComboBox;
-class QMenu;
 
-class RSSReader : public QMainWindow {
+
+class RSSReader final : public QMainWindow {
   Q_OBJECT
 
 public:
   explicit RSSReader(QWidget *parent = nullptr);
 
-  ~RSSReader();
+  ~RSSReader() override;
 
 protected:
   void closeEvent(QCloseEvent *event) override;
@@ -35,10 +34,10 @@ private:
   void setupRefreshTimer();
   void handleNetworkReply(QNetworkReply *reply);
   void loadSettings();
-  void saveSettings();
+  void saveSettings() const;
   void refreshFeeds();
-  void refreshFeed(RSSFeed &feed);
-  QString formatContent(const FeedItem &item, const RSSFeed &feed) const;
+  void refreshFeed(const RSSFeed &feed);
+  static QString formatContent(const FeedItem &item, const RSSFeed &feed) ;
 
 private slots:
   void addNewFeed();
@@ -52,9 +51,9 @@ private slots:
   void refreshAllFeeds();
   void addNewCategory();
   void showContextMenu(const QPoint &pos);
-  void categoryChanged(const QString &category);
-  void markAsRead();
-  void markAllAsRead();
+  void categoryChanged(const QString &category) const;
+  void markAsRead() const;
+  void markAllAsRead() const;
 
 private:
   struct Private;
